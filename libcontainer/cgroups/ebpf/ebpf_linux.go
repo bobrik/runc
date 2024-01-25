@@ -99,6 +99,7 @@ var (
 func haveBpfProgReplace() bool {
 	haveBpfProgReplaceOnce.Do(func() {
 		prog, err := ebpf.NewProgram(&ebpf.ProgramSpec{
+			Name:    "libcontainer_replace_check",
 			Type:    ebpf.CGroupDevice,
 			License: "MIT",
 			Instructions: asm.Instructions{
@@ -166,6 +167,7 @@ func LoadAttachCgroupDeviceFilter(insts asm.Instructions, license string, dirFd 
 
 	// Generate new program.
 	spec := &ebpf.ProgramSpec{
+		Name:         "libcontainer_device_filter",
 		Type:         ebpf.CGroupDevice,
 		Instructions: insts,
 		License:      license,
