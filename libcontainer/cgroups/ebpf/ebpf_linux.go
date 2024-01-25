@@ -93,12 +93,14 @@ var (
 )
 
 // Loosely based on the BPF_F_REPLACE support check in
-//   <https://github.com/cilium/ebpf/blob/v0.6.0/link/syscalls.go>.
+//
+//	<https://github.com/cilium/ebpf/blob/v0.6.0/link/syscalls.go>.
 //
 // TODO: move this logic to cilium/ebpf
 func haveBpfProgReplace() bool {
 	haveBpfProgReplaceOnce.Do(func() {
 		prog, err := ebpf.NewProgram(&ebpf.ProgramSpec{
+			Name:    "libcontainer_rc",
 			Type:    ebpf.CGroupDevice,
 			License: "MIT",
 			Instructions: asm.Instructions{
@@ -166,6 +168,7 @@ func LoadAttachCgroupDeviceFilter(insts asm.Instructions, license string, dirFd 
 
 	// Generate new program.
 	spec := &ebpf.ProgramSpec{
+		Name:         "libcontainer_df",
 		Type:         ebpf.CGroupDevice,
 		Instructions: insts,
 		License:      license,
